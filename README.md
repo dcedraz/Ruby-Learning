@@ -7,15 +7,7 @@ This repo is meant for keeping track of the study material I've been using to le
 - [X] This [Ruby on Rails video](https://www.youtube.com/watch?v=fmyvWz5TUWg) from FreeCodeCamp/codemy.com. - :white_check_mark: Done in October 2021
 - [ ] This [video](https://www.youtube.com/watch?v=hnCNJ5IYWFM) from Henrik Kniberg (Crip's Blog)
 - [ ] This [Learn Ruby on Rails course](https://www.codecademy.com/learn/learn-rails) from Codecademy
-- [ ] This [Authentication with Ruby on Rails course](https://www.codecademy.com/learn/rails-auth) from Codecademy
-
-The video demonstrates:
-- Iterative development with VERY fast feedback loop
-- a dash of TDD
-- continuous deployment via git & jenkins & cloudbees
-- using eclipse tightly integrated with maven, jetty, and git.
-- the basics of mongo DB
-- the basics of java servlet development (I've intentionally avoided using web frameworks, as this setup will work for any web framework).
+- [X] This [Authentication with Ruby on Rails course](https://www.codecademy.com/learn/rails-auth) from Codecademy
 
 - [ ] Read book: Ruby on Rails Tutorial (Michael Hartl)
 The book is a complete tutorial to learn Ruby on Rains from scratch.
