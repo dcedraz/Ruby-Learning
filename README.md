@@ -1,5 +1,6 @@
 # Ruby-Learning
 This repo is meant for keeping track of the study material I've been using to learn Ruby and Rails.
+#### Programming is not about what you know it is about what you can figure out. -2015, Chris Pine, Learn to Program
 
 ## Below is the content used for studying:
 
