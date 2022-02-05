@@ -10,10 +10,13 @@ This repo is meant for keeping track of the study material I've been using to le
 - [ ] This [Learn Ruby on Rails course](https://www.codecademy.com/learn/learn-rails) from Codecademy
 - [ ] This [Authentication with Ruby on Rails course](https://www.codecademy.com/learn/rails-auth) from Codecademy
 
-- [ ] Read book: Ruby on Rails Tutorial (Michael Hartl)
-The book is a complete tutorial to learn Ruby on Rains from scratch.
 
-- [ ] Ready book: Clean Code: A Handbook of Agile Software Craftsmanship (Robert C. Martin)
+- [ ] Read book: Ruby on Rails Tutorial (Michael Hartl) - This book is a complete tutorial to learn Ruby on Rains from scratch.
+- [ ] Read book: Practical Object-Oriented Design: An Agile Primer Using Ruby (Sandi Metz)
+
+
+
+- [ ] Read book: Clean Code: A Handbook of Agile Software Craftsmanship (Robert C. Martin)
 - [ ] Look for knowledge about Docker, Kubernetes, CI/CD, Unit testing, Cloudbees, Jetbrains. Basically how to program in a team.
 - [ ] Check out local bootcamps:
 - Academica do codigo
