@@ -18,9 +18,5 @@ This repo is meant for keeping track of the study material I've been using to le
 
 - [ ] Read book: Clean Code: A Handbook of Agile Software Craftsmanship (Robert C. Martin)
 - [ ] Look for knowledge about Docker, Kubernetes, CI/CD, Unit testing, Cloudbees, Jetbrains. Basically how to program in a team.
-- [ ] Check out local bootcamps:
-- Academica do codigo
-- Iron hack
-- Le wagon
 
 
