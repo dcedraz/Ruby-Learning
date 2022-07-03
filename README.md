@@ -12,7 +12,7 @@ This repo is meant for keeping track of the study material I've been using to le
 
 
 - [ ] Read book: Ruby on Rails Tutorial (Michael Hartl) - This book is a complete tutorial to learn Ruby on Rains from scratch.
-- [ ] Read book: Practical Object-Oriented Design: An Agile Primer Using Ruby (Sandi Metz)
+- [X] Read book: Practical Object-Oriented Design: An Agile Primer Using Ruby (Sandi Metz)  - :white_check_mark: Done in June 2022
 
 
 
