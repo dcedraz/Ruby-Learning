@@ -16,7 +16,9 @@ This repo is meant for keeping track of the study material I've been using to le
 
 
 
-- [ ] Read book: Clean Code: A Handbook of Agile Software Craftsmanship (Robert C. Martin)
+- [X] Read book: Clean Code: A Handbook of Agile Software Craftsmanship (Robert C. Martin) - :white_check_mark: Done in Jun 2023
 - [ ] Look for knowledge about Docker, Kubernetes, CI/CD, Unit testing, Cloudbees, Jetbrains. Basically how to program in a team.
+
+- Joined [Advent of Code](https://adventofcode.com/) in 2023, the challenge resolutions can be found under the `aoc` folder.
 
 
