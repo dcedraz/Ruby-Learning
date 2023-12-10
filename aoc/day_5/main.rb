@@ -1,12 +1,48 @@
 # frozen_string_literal: true
 
 require 'pry'
+require 'get_process_mem'
+require 'parallel'
+require 'ruby-progressbar'
+
+def print_usage(description)
+  mb = GetProcessMem.new.mb
+  puts "#{description} - MEMORY USAGE(MB): #{mb.round}"
+end
+
+def print_usage_before_and_after(message)
+  print_usage("Before - #{message} - at #{Time.now}")
+  yield
+  print_usage("After - #{message} - at #{Time.now}")
+end
 
 PARSE_NUMBERS_REGEX = /\d+(?:\s+\d+)*/.freeze
+num_process = 12
 
-locations = []
+min_location = nil
 
-seeds = File.read('input_file.txt').scan(PARSE_NUMBERS_REGEX)[0].split
+def parse_set(index)
+  File.read('input_file.txt').scan(PARSE_NUMBERS_REGEX)[index].split(/\n/).map { |x| x.split(/\s/) }
+end
+
+seeds = File.read('input_file.txt').scan(PARSE_NUMBERS_REGEX)[0].split.map(&:to_i)
+seed_to_soil = parse_set(1)
+soil_to_fertilizer = parse_set(2)
+fertilizer_to_water = parse_set(3)
+water_to_light = parse_set(4)
+light_to_temperature = parse_set(5)
+temperature_to_humidity = parse_set(6)
+humidity_to_location = parse_set(7)
+
+parsed_sets = [
+  seed_to_soil,
+  soil_to_fertilizer,
+  fertilizer_to_water,
+  water_to_light,
+  light_to_temperature,
+  temperature_to_humidity,
+  humidity_to_location
+]
 
 def find_destination(mapping_set, target_source)
   mapping_set.each do |set|
@@ -19,37 +55,30 @@ def find_destination(mapping_set, target_source)
 
     next unless source_range.member?(target_source)
 
-    puts "Source found on set: #{set}"
+    # puts "Source found on set: #{set}"
     return ((target_source - source_max).abs - destination_max).abs
   end
   false
 end
 
-def parse_set(index)
-  File.read('input_file.txt').scan(PARSE_NUMBERS_REGEX)[index].split(/\n/).map { |x| x.split(/\s/) }
-end
+puts "Start process: #{Time.now}"
 
-seeds.each do |seed|
-  mapping_set = [
-    { seed_to_soil: nil },
-    { soil_to_fertilizer: nil },
-    { fertilizer_to_water: nil },
-    { water_to_light: nil },
-    { light_to_temperature: nil },
-    { temperature_to_humidity: nil },
-    { humidity_to_location: nil }
-  ]
-  puts "Worning on seed: #{seed}"
-  mapping_set.each_with_index do |set, index|
-    puts "Looking for #{set.keys.first}"
-    target_source = mapping_set[index - 1].values.first || seed.to_i
-    result = find_destination(parse_set(index + 1), target_source) || target_source
-    puts "Result: #{result}"
-    mapping_set[index] = { set.keys.first => result }
+seeds.each_slice(2) do |seed_start, range|
+  # puts "Working on seed_start: #{seed_start} - #{Time.now}"
+  print_usage_before_and_after("Working on seed_start: #{seed_start}") do
+    seed_end = seed_start + range
+    seed_range = seed_start..seed_end
+
+    Parallel.each(seed_range, in_processes: num_process, progress: 'Processing') do |seed|
+      target_source = seed
+      mapping_set = parsed_sets.map do |set|
+        target_source = find_destination(set, target_source) || target_source
+        target_source
+      end
+      min_location ||= mapping_set.last
+      min_location = mapping_set.last < min_location ? mapping_set.last : min_location
+    end
   end
-  puts mapping_set
-  locations << mapping_set.last.values.first
 end
-puts locations
-puts "Min location: #{locations.min}"
-
+puts "End process: #{Time.now}"
+puts "Min location: #{min_location}"
