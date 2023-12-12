@@ -2,9 +2,6 @@
 
 require 'pry'
 require 'get_process_mem'
-require 'ruby-progressbar'
-require 'parallel'
-require 'ruby-progressbar'
 
 def print_usage(description)
   mb = GetProcessMem.new.mb
@@ -90,7 +87,7 @@ end
   puts "Processing location #{location} - #{Time.now}" if location % 1000000 == 0
   target_destination = location
   mapping_set = parsed_sets.reverse.map do |set|
-    target_destination = find_source(set.reverse, target_destination) || target_destination
+    target_destination = find_source(set, target_destination) || target_destination
     target_destination
   end
   next unless seeds_range.any? { |range| range.member?(mapping_set.last) }
@@ -99,22 +96,5 @@ end
   break
 end
 
-# seeds.each_slice(2) do |seed_start, range|
-#   # puts "Working on seed_start: #{seed_start} - #{Time.now}"
-#   print_usage_before_and_after("Working on seed_start: #{seed_start}") do
-#     seed_end = seed_start + range
-#     seed_range = seed_start..seed_end
-#
-#     seed_range.each do |seed|
-#       target_source = seed
-#       mapping_set = parsed_sets.map do |set|
-#         target_source = find_destination(set, target_source) || target_source
-#         target_source
-#       end
-#       min_location ||= mapping_set.last
-#       min_location = mapping_set.last < min_location ? mapping_set.last : min_location
-#     end
-#   end
-# end
 puts "End process: #{Time.now}"
 puts "Min location: #{min_location}"
