@@ -3,9 +3,7 @@
 require_relative '../../../aoc/day_6/main'
 
 describe 'DaySix' do
-
-  let(:day_six) {DaySix.new}
-
+  let(:day_six) { DaySix.new }
 
   before do
     allow(File).to receive(:readlines).and_return(
@@ -32,11 +30,11 @@ describe 'DaySix' do
         expect(day_six.solve_part_one).to eq(288)
       end
     end
-
   end
 
   context 'Part 2' do
-
+    it 'returns valid results' do
+      expect(day_six.solve_part_two).to eq(71503)
+    end
   end
-
 end
