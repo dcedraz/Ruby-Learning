@@ -15,6 +15,14 @@ class DaySeven
     'T' => 10
   }.freeze
 
+  JOKER_LETTER_CARD_POWER = {
+    'A' => 14,
+    'K' => 13,
+    'Q' => 12,
+    'J' => 1,
+    'T' => 10
+  }.freeze
+
   def initialize(input_file: 'input_file.txt')
     @file_data = File.readlines(input_file).map(&:split)
   end
@@ -28,21 +36,32 @@ class DaySeven
     end
   end
 
-  def solve_part_one
+  def parsed_hands_with_joker
+    @parsed_hands_with_joker ||= Array.new.tap do |parsed_hands|
+      file_data.each do |hand_row|
+        hand_type = HandType.new(hand_row[0], hand_row[1])
+        parsed_hands << { hand: hand_type.hand, bid: hand_type.bid, type: hand_type.joker_type, rank: 1 }
+      end
+    end
+  end
+
+  def solve
     ranked_hands = []
     HandType::HAND_TYPES.each do |type|
-      hands_of_type = parsed_hands.select { |hand| hand[:type] == type }
+      hands_of_type = @joker ? parsed_hands_with_joker.select { |hand| hand[:type] == type } : parsed_hands.select { |hand| hand[:type] == type }
       next if hands_of_type.empty?
 
       untie_sort(hands_of_type) while duplicates?(hands_of_type)
       hands_of_type.sort! { |a, b| a[:rank] <=> b[:rank] }
       ranked_hands << hands_of_type
     end
-
     result = 0
     ranked_hands.flatten.each.with_index { |hand, index| result += hand[:bid].to_i * (index + 1) }
     result
+  end
 
+  def solve_part_one
+    solve
   end
 
   def duplicates?(array)
@@ -77,16 +96,18 @@ class DaySeven
     if card.match?(/\d/)
       card.to_i
     else
-      LETTER_CARD_POWER[card]
+      @joker ? JOKER_LETTER_CARD_POWER[card] : LETTER_CARD_POWER[card]
     end
   end
 
   def solve_part_two
+    @joker = true
+    solve
   end
 
   def perform
     puts solve_part_one
-    # solve_part_two
+    puts solve_part_two
   end
 end
 
