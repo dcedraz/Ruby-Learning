@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../../aoc/day_8/main'
+require_relative '../../../aoc/2023/day_8/_8/main'
 
 describe 'DayEight' do
   context 'Part I' do

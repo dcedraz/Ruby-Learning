@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../../../aoc/day_7/main'
-require_relative '../../../aoc/day_7/hand_type'
+require_relative '../../../aoc/2023/day_7/_7/main'
+require_relative '../../../aoc/2023/day_7/hand_type'
 
 describe 'HandType' do
   let(:five_of_kind_hand) { HandType.new('AAAAA', '0') }

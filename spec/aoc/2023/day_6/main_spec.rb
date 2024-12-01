@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../../aoc/day_6/main'
+require_relative '../../../aoc/2023/day_6/_6/main'
 
 describe 'DaySix' do
   let(:day_six) { DaySix.new }
