@@ -7,7 +7,7 @@ describe 'DayTwo' do
     let(:day_two) { DayTwo.new(input_file: 'input_file.txt') }
 
     before do
-      day_two.perform
+      day_two.solve_part_one
     end
 
     # input:
@@ -62,7 +62,7 @@ describe 'DayTwo' do
     end
 
     it 'counts the number of safe reports' do
-      expect(day_two.safe_reports).to eq(2)
+      expect(day_two.safe_reports_count).to eq(2)
     end
   end
 
@@ -70,7 +70,38 @@ describe 'DayTwo' do
     let(:day_two) { DayTwo.new(input_file: 'input_file.txt') }
 
     before do
-      day_two.perform
+      day_two.solve_part_two
+    end
+
+    it 'lists all unsafe reports' do
+      expect(day_two.unsafe_reports.map(&:levels)).to eq([[1, 2, 7, 8, 9], [9, 7, 6, 2, 1], [1, 3, 2, 4, 5], [8, 6, 4, 4, 1]])
+    end
+
+    context 'Reports class' do
+      let(:report_unsafe_1) { DayTwo::Report.new([1, 2, 7, 8, 9]) }
+      let(:report_unsafe_2) { DayTwo::Report.new([9, 7, 6, 2, 1]) }
+      let(:report_unsafe_3) { DayTwo::Report.new([1, 3, 2, 4, 5]) }
+      let(:report_unsafe_4) { DayTwo::Report.new([8, 6, 4, 4, 1]) }
+      let(:safe_report_4) { DayTwo::Report.new([8, 6, 4, 1]) }
+
+      it 'repairs the unsafe reports' do
+        expect(report_unsafe_1.repairable?).to be_falsey
+        expect(report_unsafe_2.repairable?).to be_falsey
+        expect(report_unsafe_3.repairable?).to be_truthy
+        expect(report_unsafe_4.repairable?).to be_truthy
+      end
+
+      it 'checks the report is safe' do
+        expect(safe_report_4.safe?).to be_truthy
+      end
+    end
+
+    it 'counts the number of repairable reports' do
+      expect(day_two.repairable_reports_count).to eq(2)
+    end
+
+    it 'returns the number of safe plus repairable reports' do
+      expect(day_two.solve_part_two).to eq(4)
     end
   end
 end
