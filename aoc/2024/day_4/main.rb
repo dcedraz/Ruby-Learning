@@ -21,6 +21,7 @@ class DayFour
   def solve_part_one
     @xmas_count = 0
     count_xmas_occurrences
+    puts "XMAS count: #{@xmas_count}"
   end
 
   def count_xmas_occurrences
@@ -28,52 +29,11 @@ class DayFour
       (0..max_column).each do |c|
         next unless file_data[r][c] == xmas[0]
 
-        puts "[#{r},#{c}] - Horizontal: #{count_xmas_horizontal(r,
-                                                                c)} - Vertical: #{count_xmas_vertical(r,
-                                                                                                      c)} - Diagonal: #{count_xmas_diagonal(
-                                                                                                        r, c
-                                                                                                      )}"
-
         @xmas_count += count_xmas_horizontal(r, c)
         @xmas_count += count_xmas_vertical(r, c)
         @xmas_count += count_xmas_diagonal(r, c)
-        puts "XMAS count: #{@xmas_count}"
       end
     end
-  end
-
-  def xmas_count_in_position(row, column)
-    return 0 if file_data[row][column] != xmas[0]
-
-    count_xmax_recursively(row, column, 1)
-    @xmas_count
-  end
-
-  def find_char_positions_around(row, column, char)
-    positions = []
-    (row - 1..row + 1).each do |r|
-      next if r < min_row || r > max_row
-
-      (column - 1..column + 1).each do |c|
-        next if c < min_column || c > max_column
-        next unless file_data[r][c] == char
-
-        positions << [r, c]
-      end
-    end
-    positions
-  end
-
-  def horizontal_direction?(row, column, next_row, next_column)
-    row == next_row
-  end
-
-  def vertical_direction?(row, column, next_row, next_column)
-    column == next_column
-  end
-
-  def diagonal_direction?(row, column, next_row, next_column)
-    (row - next_row).abs == (column - next_column).abs
   end
 
   def count_xmas_horizontal(row, column)
