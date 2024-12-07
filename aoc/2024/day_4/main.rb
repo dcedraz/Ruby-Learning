@@ -2,7 +2,7 @@
 
 require 'pry'
 class DayFour
-  attr_reader :file_data, :min_row, :max_row, :min_column, :max_column, :xmas, :xmas_count
+  attr_reader :file_data, :min_row, :max_row, :min_column, :max_column, :xmas, :xmas_count, :x_mas_count
 
   def initialize(input_file: 'input_file.txt')
     @file_data = File.readlines(input_file)
@@ -71,6 +71,56 @@ class DayFour
   end
 
   def solve_part_two
+    @x_mas_count = 0
+    count_x_mas_occurrences
+    puts "X-MAS count: #{@x_mas_count}"
+  end
+
+  def count_x_mas_occurrences
+    (0..max_row).each do |r|
+      (0..max_column).each do |c|
+        next unless file_data[r][c] == 'A'
+
+        @x_mas_count += 1 if x_mas_exists?(r, c)
+      end
+    end
+  end
+
+  def x_mas_exists?(row, column)
+    diagonal_m_chars = find_char_positions_around(row, column, 'M').filter do |arr|
+      diagonal_direction?(row, column, arr.first, arr.last)
+    end
+    diagonal_s_chars = find_char_positions_around(row, column, 'S').filter do |arr|
+      diagonal_direction?(row, column, arr.first, arr.last)
+    end
+
+    return false if diagonal_m_chars.length != 2 || diagonal_s_chars.length != 2
+
+    diagonal_m_chars.each do |m_row, m_column|
+      diagonal_s_chars.each do |s_row, s_column|
+        return true if (m_row - s_row).abs == (m_column - s_column).abs
+      end
+    end
+    false
+  end
+
+  def find_char_positions_around(row, column, char)
+    positions = []
+    (row - 1..row + 1).each do |r|
+      next if r < min_row || r > max_row
+
+      (column - 1..column + 1).each do |c|
+        next if c < min_column || c > max_column
+        next unless file_data[r][c] == char
+
+        positions << [r, c]
+      end
+    end
+    positions
+  end
+
+  def diagonal_direction?(row, column, next_row, next_column)
+    (row - next_row).abs == (column - next_column).abs
   end
 end
 
