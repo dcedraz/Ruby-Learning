@@ -105,18 +105,11 @@ class DayFour
   end
 
   def find_char_positions_around(row, column, char)
-    positions = []
-    (row - 1..row + 1).each do |r|
-      next if r < min_row || r > max_row
-
-      (column - 1..column + 1).each do |c|
-        next if c < min_column || c > max_column
-        next unless file_data[r][c] == char
-
-        positions << [r, c]
+    (row - 1..row + 1).flat_map do |r|
+      (column - 1..column + 1).map do |c|
+        [r, c] if valid_row?(r) && valid_column?(c) && file_data[r][c] == char
       end
-    end
-    positions
+    end.compact
   end
 
   def diagonal_direction?(row, column, next_row, next_column)
