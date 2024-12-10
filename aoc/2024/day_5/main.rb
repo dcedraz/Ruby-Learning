@@ -20,7 +20,7 @@ class DayFive
   def solve_part_one
     parse_file_data
     create_rules_hash
-    puts("Result part one: ", sum_middle_number_valid_updates)
+    puts "Result part one: #{sum_middle_number_valid_updates}"
   end
 
   def solve_part_two
@@ -77,83 +77,28 @@ class DayFive
     updates.map do |update|
       next if valid_update?(update)
 
-      # fixed = []
-      # while !valid_update?(update)
-      #   fixed = sort_by_rules(update)
-      # end
-
       fixed = sort_by_rules(update)
       middle = find_middle_number(fixed)
-      # puts " Update: #{update}"
-      # puts " fixed: #{fixed}: #{middle}"
-      puts "Invalid: #{fixed}" if !valid_update?(fixed)
       middle
     end.compact.sum
-    # updates.map do |update|
-    #   next if valid_update?(update)
-    #
-    #   array = update.map{ |x|rules_left_hash.values.flatten.count(x) }
-    #   max = array.max / 2
-    #   binding.pry
-    #   update[array.index(max)]
-    # end
   end
 
   def sort_by_rules(update)
-    puts "Occurences per rule: #{update.map { |x| rules_left_hash.values.flatten.count(x) }}"
-    update.sort do |a, b|
-      rules_right_hash.values.flatten.count(a) <=> rules_right_hash.values.flatten.count(b)
-    end
-    # binding.pry if !valid_update?(new)
-  end
+    fixed = []
+    remaining = update.clone
 
-  # def sort_by_rules(update)
-  #   sorted_update = []
-  #   invalid_values = []
-  #
-  #   update.each_with_index do |num, index|
-  #     if valid_left_rule?(update, index) && valid_right_rule?(update, index)
-  #       sorted_update << num
-  #       next
-  #     else
-  #       invalid_values << num
-  #     end
-  #   end
-  #
-  #   invalid_values.each do |num|
-  #     sorted_update.each_with_index do |_sorted_num, index|
-  #       # binding.pry if update == [61, 13, 29]
-  #       if valid_right_rule?([invalid_values] + sorted_update, index) && valid_left_rule?([invalid_values] + sorted_update, index)
-  #         sorted_update.unshift(num)
-  #         break
-  #       end
-  #       if valid_left_rule?(sorted_update + [invalid_values], index) && valid_right_rule?(sorted_update + [invalid_values], index)
-  #         sorted_update << num
-  #         break
-  #       end
-  #     end
-  #   end
-  #
-  #   # binding.pry if update == [75, 97, 47, 61, 53]
-  #
-  #   if sorted_update.length != update.length
-  #     invalid_values.reverse!.each do |num|
-  #       sorted_update.each_with_index do |_sorted_num, index|
-  #         # binding.pry if update == [61, 13, 29]
-  #         if valid_right_rule?([invalid_values] + sorted_update, index) && valid_left_rule?([invalid_values] + sorted_update, index)
-  #           sorted_update.unshift(num)
-  #           break
-  #         end
-  #         if valid_left_rule?(sorted_update + [invalid_values], index) && valid_right_rule?(sorted_update + [invalid_values], index)
-  #           sorted_update << num
-  #           break
-  #         end
-  #       end
-  #     end
-  #   end
-  #
-  #   sorted_update
-  # end
+    loop do
+      return fixed if remaining.empty?
+
+      number = remaining.first
+
+      if valid_left_rule?(fixed + [number], fixed.length) && valid_right_rule?(fixed + [number], fixed.length)
+        fixed << remaining.shift
+      else
+        remaining << fixed.pop
+      end
+    end
+  end
 end
 
 DayFive.new.perform
