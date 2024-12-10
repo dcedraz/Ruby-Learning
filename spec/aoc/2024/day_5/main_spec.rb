@@ -109,7 +109,17 @@ describe 'DayFive' do
     let(:day_five) { DayFive.new(input_file: 'input_file.txt') }
 
     before do
-      day_five.solve_part_two
+      day_five.perform
+    end
+
+    it 'fixes an invalid update' do
+      expect(day_five.sort_by_rules([75, 97, 47, 61, 53])).to eq([97, 75, 47, 61, 53])
+      expect(day_five.sort_by_rules([61, 13, 29])).to eq([61, 29, 13])
+      expect(day_five.sort_by_rules([97, 13, 75, 29, 47])).to eq([97, 75, 47, 29, 13])
+    end
+
+    it 'sums up the middle number of invalid updates' do
+      expect(day_five.sum_middle_number_invalid_updates).to eq(123)
     end
   end
 end
