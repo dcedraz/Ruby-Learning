@@ -43,21 +43,16 @@ class DaySix
 
     loop do
       positions_visited[[row, column]] += 1 unless out_of_boundaries?(row, column)
-      # puts "Direction: #{current_direction.capitalize} - Row: #{row}, Column: #{column} - Steps: #{positions_visited.keys.count}"
-      # binding.pry if file_data[5][4] == NEW_OBSTACLE_SYMBOL
 
       return if out_of_boundaries?(row, column)
 
       if starting_position != [row, column] && positions_visited[[row, column]] > 5
-        # binding.pry
         @infinite_loop_count += 1
-        # puts "Infinite loop detected on Row: #{row}, Column: #{column}"
         return
       end
 
       directions[current_direction][:move].call
       if hit_obstacle?(row, column)
-        # puts "Hit obstacle: Row: #{row}, Column: #{column}"
         directions[current_direction][:revert].call
         current_direction = directions[current_direction][:next]
       end
@@ -75,14 +70,12 @@ class DaySix
   end
 
   def solve_part_two
-    target_positions = positions_visited.keys.dup
-    target_positions.each_with_index do |new_pos, index|
-      puts "Current index: #{index} of #{target_positions.count}" if index % 100 == 0
+    positions_visited.keys.each_with_index do |new_pos, index|
+      puts "Index: #{index} / #{positions_visited.keys.count}" if (index % 100).zero?
       @positions_visited = Hash.new { |h, k| h[k] = 0 }
       next if new_pos == starting_position
 
       file_data[new_pos[0]][new_pos[1]] = NEW_OBSTACLE_SYMBOL
-      # puts "New obstacle: Row: #{new_pos[0]}, Column: #{new_pos[1]}"
       parse_map
       file_data[new_pos[0]][new_pos[1]] = DEFAULT_SYMBOL
     end

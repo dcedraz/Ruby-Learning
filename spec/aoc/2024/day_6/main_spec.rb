@@ -6,10 +6,6 @@ describe 'DaySix' do
   context 'Part I' do
     let(:day_six) { DaySix.new(input_file: 'input_file.txt') }
 
-    # before do
-    #   day_six.solve_part_one
-    # end
-
     # input:
     # ....#.....
     # .........#
@@ -37,10 +33,6 @@ describe 'DaySix' do
       expect(day_six.out_of_boundaries?(9, 9)).to be_falsey
       expect(day_six.out_of_boundaries?(10, 10)).to be_truthy
       expect(day_six.out_of_boundaries?(-1, -1)).to be_truthy
-    end
-
-    it 'checks if a given row and column number hits an obstacle' do
-
     end
 
     it 'finds the starting position' do
