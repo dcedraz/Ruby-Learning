@@ -48,7 +48,7 @@ describe 'DaySix' do
     end
 
     it 'counts how many steps until out of boundaries' do
-      expect(day_six.steps_to_exit).to eq(41)
+      expect(day_six.solve_part_one).to eq(41)
     end
   end
 
@@ -56,7 +56,11 @@ describe 'DaySix' do
     let(:day_six) { DaySix.new(input_file: 'input_file.txt') }
 
     before do
-      day_six.solve_part_two
+      day_six.solve_part_one
+    end
+
+    it 'counts how many times the new obstacle causes an infinite loop' do
+      expect(day_six.solve_part_two).to eq(6)
     end
   end
 end

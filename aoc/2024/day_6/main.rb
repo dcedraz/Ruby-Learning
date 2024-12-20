@@ -2,11 +2,13 @@
 
 require 'pry'
 class DaySix
-
-  attr_reader :file_data, :starting_position, :min_row, :max_row, :min_column, :max_column, :positions_visited
+  attr_reader :file_data, :starting_position, :min_row, :max_row, :min_column, :max_column, :positions_visited,
+              :infinite_loop_count
 
   START_SYMBOL = '^'
   OBSTACLE_SYMBOL = '#'
+  NEW_OBSTACLE_SYMBOL = '0'
+  DEFAULT_SYMBOL = '.'
 
   def initialize(input_file: 'input_file.txt')
     @file_data = File.readlines(input_file).map(&:strip)
@@ -14,7 +16,8 @@ class DaySix
     @max_row = @file_data.count - 1 # 129
     @min_column = 0
     @max_column = @file_data.first.length - 1 # 129
-    @positions_visited = []
+    @positions_visited = Hash.new { |h, k| h[k] = 0 }
+    @infinite_loop_count = 0
   end
 
   def perform
@@ -23,10 +26,12 @@ class DaySix
   end
 
   def solve_part_one
-    puts "Result part one: #{steps_to_exit}"
+    parse_map
+    puts "Result part one: #{positions_visited.keys.count}"
+    positions_visited.keys.count
   end
 
-  def steps_to_exit
+  def parse_map
     row, column = starting_position
     directions = {
       north: { move: -> { row -= 1 }, revert: -> { row += 1 }, next: :east },
@@ -37,78 +42,27 @@ class DaySix
     current_direction = :north
 
     loop do
-      positions_visited << [row, column] unless out_of_boundaries?(row, column)
-      puts "Direction: #{current_direction.capitalize} - Row: #{row}, Column: #{column} - Steps: #{positions_visited.uniq.count}"
+      positions_visited[[row, column]] += 1 unless out_of_boundaries?(row, column)
+      # puts "Direction: #{current_direction.capitalize} - Row: #{row}, Column: #{column} - Steps: #{positions_visited.keys.count}"
+      # binding.pry if file_data[5][4] == NEW_OBSTACLE_SYMBOL
 
-      return positions_visited.uniq.count if out_of_boundaries?(row, column)
+      return if out_of_boundaries?(row, column)
+
+      if starting_position != [row, column] && positions_visited[[row, column]] > 5
+        # binding.pry
+        @infinite_loop_count += 1
+        # puts "Infinite loop detected on Row: #{row}, Column: #{column}"
+        return
+      end
 
       directions[current_direction][:move].call
       if hit_obstacle?(row, column)
+        # puts "Hit obstacle: Row: #{row}, Column: #{column}"
         directions[current_direction][:revert].call
         current_direction = directions[current_direction][:next]
       end
     end
   end
-
-  # def steps_to_exit
-  #   steps = 0
-  #   row, column = starting_position
-  #   north_direction = true
-  #   east_direction = false
-  #   south_direction = false
-  #   west_direction = false
-  #
-  #   loop do
-  #     steps += 1
-  #     puts "North: #{north_direction}, East: #{east_direction}, South: #{south_direction}, West: #{west_direction} - Row: #{row}, Column: #{column} - Steps: #{steps}"
-  #
-  #     return steps if out_of_boundaries?(row, column)
-  #
-  #     if north_direction
-  #       row -= 1
-  #       if hit_obstacle?(row, column)
-  #         row += 1
-  #         # column += 1
-  #         # row -= 1
-  #         north_direction = false
-  #         east_direction = true
-  #       end
-  #     end
-  #
-  #     if east_direction
-  #       column += 1
-  #       if hit_obstacle?(row, column)
-  #         column -= 1
-  #         # row += 1
-  #         # column += 1
-  #         east_direction = false
-  #         south_direction = true
-  #       end
-  #     end
-  #
-  #     if south_direction
-  #       row += 1
-  #       if hit_obstacle?(row, column)
-  #         row -= 1
-  #         # column -= 1
-  #         # row += 1
-  #         south_direction = false
-  #         west_direction = true
-  #       end
-  #     end
-  #
-  #     if west_direction
-  #       column -= 1
-  #       if hit_obstacle?(row, column)
-  #         column += 1
-  #         # row -= 1
-  #         # column -= 1
-  #         west_direction = false
-  #         north_direction = true
-  #       end
-  #     end
-  #   end
-  # end
 
   def out_of_boundaries?(row, column)
     row < min_row || row > max_row || column < min_column || column > max_column
@@ -117,10 +71,23 @@ class DaySix
   def hit_obstacle?(row, column)
     return if out_of_boundaries?(row, column)
 
-    file_data[row][column] == OBSTACLE_SYMBOL
+    file_data[row][column] == OBSTACLE_SYMBOL || file_data[row][column] == NEW_OBSTACLE_SYMBOL
   end
 
   def solve_part_two
+    target_positions = positions_visited.keys.dup
+    target_positions.each_with_index do |new_pos, index|
+      puts "Current index: #{index} of #{target_positions.count}" if index % 100 == 0
+      @positions_visited = Hash.new { |h, k| h[k] = 0 }
+      next if new_pos == starting_position
+
+      file_data[new_pos[0]][new_pos[1]] = NEW_OBSTACLE_SYMBOL
+      # puts "New obstacle: Row: #{new_pos[0]}, Column: #{new_pos[1]}"
+      parse_map
+      file_data[new_pos[0]][new_pos[1]] = DEFAULT_SYMBOL
+    end
+    puts "Result part two: #{infinite_loop_count}"
+    infinite_loop_count
   end
 
   def starting_position
@@ -129,7 +96,6 @@ class DaySix
       return [row, column] if column
     end
   end
-
 end
 
 DaySix.new.perform
