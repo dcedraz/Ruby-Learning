@@ -58,5 +58,9 @@ describe 'DaySeven' do
   context 'Part II' do
     let(:day_seven) { DaySeven.new(input_file: 'input_file.txt') }
 
+    it 'sums up the test values for valid equations' do
+      expect(day_seven.solve_part_two).to eq(11387)
+    end
+
   end
 end
