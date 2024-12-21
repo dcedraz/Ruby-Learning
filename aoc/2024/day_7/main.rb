@@ -9,7 +9,7 @@ class DaySeven
   end
 
   def perform
-    # solve_part_one
+    solve_part_one
     # solve_part_two
   end
 
@@ -20,8 +20,9 @@ class DaySeven
   end
 
   def solve_part_one
-    puts "Result part one: #{file_data.count}"
-    file_data.count
+    result = equations.select(&:valid?).map(&:test_value).sum
+    puts 'Result part one: ' + result.to_s
+    result
   end
 
   def solve_part_two
@@ -40,19 +41,31 @@ class DaySeven
     end
 
     def possible_combinations
-      number_of_pairs = numbers.size - 1
-      operators_combinations = POSSIBLE_OPERATORS.repeated_permutation(number_of_pairs).to_a
-      operators_combinations.map do |operators|
-        numbers.zip(operators).flatten.compact.join(' ')
+      @possible_combinations ||= begin
+        number_of_pairs = numbers.size - 1
+        operators_combinations = POSSIBLE_OPERATORS.repeated_permutation(number_of_pairs).to_a
+        operators_combinations.map do |operators|
+          numbers.zip(operators).flatten.compact.join(' ')
+        end
       end
     end
 
+    def evaluate_left_to_right(expression)
+      tokens = expression.split
+      result = tokens.shift.to_i
+
+      tokens.each_slice(2) do |operator, operand|
+        result = result.send(operator, operand.to_i)
+      end
+
+      result
+    end
     def valid?
-      numbers.each_cons(2).all? do |a, b|
-        POSSIBLE_OPERATORS.include?(a.to_s) || POSSIBLE_OPERATORS.include?(b.to_s)
+      possible_combinations.any? do |combination|
+        evaluate_left_to_right(combination) == test_value
       end
     end
   end
 end
 
-# DaySeven.new.perform
+DaySeven.new.perform

@@ -33,13 +33,25 @@ describe 'DaySeven' do
       expect(day_seven.equations[0].possible_combinations).to eq(['10 + 19', '10 * 19'])
       expect(day_seven.equations[1].possible_combinations).to eq(['81 + 40 + 27', '81 + 40 * 27', '81 * 40 + 27', '81 * 40 * 27'])
       expect(day_seven.equations[2].possible_combinations).to eq(['17 + 5', '17 * 5'])
+      expect(day_seven.equations[8].possible_combinations).to eq(['11 + 6 + 16 + 20', '11 + 6 + 16 * 20', '11 + 6 * 16 + 20', '11 + 6 * 16 * 20', '11 * 6 + 16 + 20', '11 * 6 + 16 * 20', '11 * 6 * 16 + 20', '11 * 6 * 16 * 20'])
     end
 
-    xit 'checks if an equation is valid' do
+    it 'evaluations the expression from left to right' do
+      expect(day_seven.equations[0].evaluate_left_to_right('10 + 19')).to eq(29)
+      expect(day_seven.equations[1].evaluate_left_to_right('81 + 40 + 27')).to eq(148)
+      expect(day_seven.equations[2].evaluate_left_to_right('17 + 5')).to eq(22)
+      expect(day_seven.equations[8].evaluate_left_to_right('11 + 6 * 16 + 20')).to eq(292)
+    end
+
+    it 'checks if an equation is valid' do
       expect(day_seven.equations[0].valid?).to be_truthy
       expect(day_seven.equations[1].valid?).to be_truthy
       expect(day_seven.equations[2].valid?).to be_falsey
       expect(day_seven.equations[8].valid?).to be_truthy
+    end
+
+    it 'sums up the test values for valid equations' do
+      expect(day_seven.solve_part_one).to eq(3749)
     end
   end
 
