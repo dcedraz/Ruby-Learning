@@ -43,12 +43,8 @@ class DaySeven
       number_of_pairs = numbers.size - 1
       operators_combinations = POSSIBLE_OPERATORS.repeated_permutation(number_of_pairs).to_a
       operators_combinations.map do |operators|
-        numbers.each_cons(numbers.size).map do |con_array|
-          con_array.map.with_index do |number, index|
-            operators[index] ? number.to_s + " #{operators[index]} " : number.to_s
-          end.join
-        end
-      end.flatten
+        numbers.zip(operators).flatten.compact.join(' ')
+      end
     end
 
     def valid?
