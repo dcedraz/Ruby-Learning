@@ -19,29 +19,79 @@ class DayOne < DayBase
 
   def solve_part_one
     rows.each do |instruction|
-      puts "Current Position: #{position}, Instruction: #{instruction}, Zeros Count: #{count_zero_occurrences}"
       calc_new_position(instruction)
-      puts "New Position: #{position}"
     end
-    puts count_zero_occurrences
+    puts "Part I Result: #{count_zero_occurrences}"
+    count_zero_occurrences
+  end
+
+  def solve_part_two
+    result = real_password
+    puts "Part II Result: #{result}"
+    result
   end
 
   def calc_new_position(instruction)
     direction, steps = instruction[0], instruction[1..].to_i
 
     if direction == 'L'
-      steps -= (LAST_POSITION + 1) while (position - steps) < FIRST_POSITION
+      while new_pos_backwards_to_zero?(position - steps)
+        steps -= (LAST_POSITION + 1)
+      end
       @position = pointer[position - steps]
-    elsif (position + steps) > LAST_POSITION
-      steps -= (LAST_POSITION + 1) while (position + steps) > LAST_POSITION
-      @position = pointer[position + steps]
     else
+      while new_pos_forwards_to_zero?(position + steps)
+        steps -= (LAST_POSITION + 1)
+      end
       @position = pointer[position + steps]
     end
-
     @count_zero_occurrences += 1 if position.zero?
   end
 
+  #
+  # Copied the solution by Erik Kessler
+  # https://github.com/erikkessler1/advent-of-code-2025/blob/master/day-01/secret_entrance.rb
+  #
+
+  def real_password
+    pointer = 50
+    zeros = 0
+
+    turns.each do |turn|
+      distance = if turn.negative?
+                   (100 - pointer) + (turn * -1)
+                 else
+                   pointer + turn
+                 end
+
+      zeros += distance / 100
+      zeros -= 1 if turn.negative? && pointer.zero?
+      pointer = (pointer + turn) % 100
+    end
+
+    zeros
+  end
+
+  private
+
+  def turns
+    rows.map do |line|
+      value = line[1..].to_i
+      line.start_with?("L") ? value * -1 : value
+    end
+  end
+
+  #
+  # End of Erik Kessler solution
+  #
+
+  def new_pos_backwards_to_zero?(new_pos)
+    new_pos < FIRST_POSITION
+  end
+
+  def new_pos_forwards_to_zero?(new_pos)
+    new_pos > LAST_POSITION
+  end
 end
 
 DayOne.new.perform

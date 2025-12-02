@@ -67,15 +67,9 @@ describe 'DayOne' do
       day_one.solve_part_one
       expect(day_one.count_zero_occurrences).to eq(3)
     end
-  end
 
-  context 'Part II' do
-    let(:day_one) { DayOne.new(input_file: 'input_file.txt') }
-
-    before do
-      day_one.perform
+    it 'solves part two correctly' do
+      expect(day_one.solve_part_two).to eq(6)
     end
-
-    # input:
   end
 end
