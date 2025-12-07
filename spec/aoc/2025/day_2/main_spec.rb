@@ -36,26 +36,48 @@ describe 'DayTwo' do
       ].flatten)
     end
 
-    it 'validates if an ID is valid or invalid' do
-      expect(day_two.valid_id?(95)).to be true
-      expect(day_two.valid_id?(100)).to be true
-      expect(day_two.valid_id?(110)).to be true
-      expect(day_two.valid_id?(1000)).to be true
-      expect(day_two.valid_id?(1698522)).to be true
-      expect(day_two.valid_id?(38593856)).to be true
+    it 'validates if an ID is valid or invalid with simple conditions' do
+      expect(day_two.simple_valid_id?(95)).to be true
+      expect(day_two.simple_valid_id?(100)).to be true
+      expect(day_two.simple_valid_id?(110)).to be true
+      expect(day_two.simple_valid_id?(1000)).to be true
+      expect(day_two.simple_valid_id?(1698522)).to be true
+      expect(day_two.simple_valid_id?(38593856)).to be true
 
-      expect(day_two.valid_id?(11)).to be false
-      expect(day_two.valid_id?(22)).to be false
-      expect(day_two.valid_id?(99)).to be false
-      expect(day_two.valid_id?(1010)).to be false
-      expect(day_two.valid_id?(1188511885)).to be false
-      expect(day_two.valid_id?(222222)).to be false
-      expect(day_two.valid_id?(446446)).to be false
-      expect(day_two.valid_id?(38593859)).to be false
+      expect(day_two.simple_valid_id?(11)).to be false
+      expect(day_two.simple_valid_id?(22)).to be false
+      expect(day_two.simple_valid_id?(99)).to be false
+      expect(day_two.simple_valid_id?(1010)).to be false
+      expect(day_two.simple_valid_id?(1188511885)).to be false
+      expect(day_two.simple_valid_id?(222222)).to be false
+      expect(day_two.simple_valid_id?(446446)).to be false
+      expect(day_two.simple_valid_id?(38593859)).to be false
     end
 
     it 'sums all the invalid IDs correctly' do
       expect(day_two.solve_part_one).to eq(1227775554)
+    end
+
+    it 'validates if an ID is valid or invalid with complex conditions' do
+      expect(day_two.complex_valid_id?(95)).to be true
+      expect(day_two.complex_valid_id?(100)).to be true
+
+      expect(day_two.complex_valid_id?(11)).to be false
+      expect(day_two.complex_valid_id?(22)).to be false
+      expect(day_two.complex_valid_id?(99)).to be false
+      expect(day_two.complex_valid_id?(999)).to be false
+      expect(day_two.complex_valid_id?(1010)).to be false
+      expect(day_two.complex_valid_id?(1188511885)).to be false
+      expect(day_two.complex_valid_id?(222222)).to be false
+      expect(day_two.complex_valid_id?(446446)).to be false
+      expect(day_two.complex_valid_id?(38593859)).to be false
+      expect(day_two.complex_valid_id?(565656)).to be false
+      expect(day_two.complex_valid_id?(824824824)).to be false
+      expect(day_two.complex_valid_id?(2121212121)).to be false
+    end
+
+    it 'sums all the invalid IDs correctly for complex validation' do
+      expect(day_two.solve_part_two).to eq(4174379265)
     end
   end
 end

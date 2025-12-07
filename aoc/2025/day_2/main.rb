@@ -3,8 +3,8 @@
 require_relative '../../day_base'
 
 class DayTwo < DayBase
-
   attr_reader :ranges, :ids
+
   def initialize
     super
     @ranges = file_data.first.split(',')
@@ -12,9 +12,16 @@ class DayTwo < DayBase
   end
 
   def solve_part_one
-    invalid_ids = ids.select { |id| !valid_id?(id) }
+    invalid_ids = ids.reject { |id| simple_valid_id?(id) }
     result = invalid_ids.sum
-    puts result
+    puts "Part I Result: #{result}"
+    result
+  end
+
+  def solve_part_two
+    invalid_ids = ids.reject { |id| complex_valid_id?(id) }
+    result = invalid_ids.sum
+    puts "Part II Result: #{result}"
     result
   end
 
@@ -25,7 +32,7 @@ class DayTwo < DayBase
     end.flatten
   end
 
-  def valid_id?(id)
+  def simple_valid_id?(id)
     digits = id.digits.reverse
     length = digits.length
     half_length = length / 2
@@ -36,6 +43,25 @@ class DayTwo < DayBase
     second_half = digits[half_length...length]
 
     first_half != second_half
+  end
+
+  def complex_valid_id?(id)
+    digits = id.digits.reverse
+    length = digits.length
+
+    regex_shortest = /(.+?)\1+/
+    regex_longest = /(.+)\1+/
+    matches = id.to_s.scan(regex_shortest).flatten + id.to_s.scan(regex_longest).flatten
+    matches.uniq!
+
+    return true if matches.empty?
+
+    matches.none? do |match|
+      next unless (length % match.length).zero?
+
+      repeated_digits = match.chars.map(&:to_i)
+      digits.each_slice(repeated_digits.length).all? { |slice| slice == repeated_digits }
+    end
   end
 
 end
