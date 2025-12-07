@@ -32,5 +32,16 @@ describe 'DayThree' do
     it 'sums all the largest joltage values correctly' do
       expect(day_three.solve_part_one).to eq(357)
     end
+
+    it 'finds the larger max joltage for a bank' do
+      expect(day_three.larger_max_joltage("987654321111111")).to eq(987654321111)
+      expect(day_three.larger_max_joltage("811111111111119")).to eq(811111111119)
+      expect(day_three.larger_max_joltage("234234234234278")).to eq(434234234278)
+      expect(day_three.larger_max_joltage("818181911112111")).to eq(888911112111)
+    end
+
+    it 'sums all the larger max joltage values correctly' do
+      expect(day_three.solve_part_two).to eq(3121910778619)
+    end
   end
 end
